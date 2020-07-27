@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/security 
+	http://www.springframework.org/schema/security/spring-security.xsd
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<!-- 정적 리소스 접근url과 에러 페이지url은 시큐리티 필터링에서 제외시킴 -->
+	<security:http pattern="/resources/**" security="none"/>
+	<security:http pattern="/fail" security="none"/>
+	<security:http pattern="/deny" security="none"/>
+	
+	<!-- 시큐리티 리소스 설정  https 설정은 나중에 고민해 볼 것...--> 
+    <security:http auto-config="true" use-expressions="true">
+    	<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>    
+    	<security:intercept-url pattern="/main" access="isAuthenticated()"/>
+    	<security:intercept-url pattern="/auth" access="isAnonymous()" /> 
+    	<security:intercept-url pattern="/household/**" access="isAuthenticated()"/>
+    	<security:intercept-url pattern="/chart/**" access="isAuthenticated()"/> 
+    	<security:intercept-url pattern="/excel/**" access="isAuthenticated()"/>
+    	<security:intercept-url pattern="/login/process" access="isAnonymous()" /> 
+    	<security:intercept-url pattern="/login/postProcess" access="isAuthenticated()"/>
+    	<security:intercept-url pattern="/join" access="isAnonymous()"/>             
+       	<security:intercept-url pattern="/" access="isAnonymous()"/>
+         	              
+        <!--로그인 처리 -->
+        <security:form-login login-page="/" login-processing-url="/login/process" 
+        	username-parameter="id" password-parameter="password" default-target-url="/main"
+        	authentication-failure-url="/fail"/>
+      
+        <!-- 권한이 제한된 리소스 접근시 이동 페이지 설정 --> 
+   		<security:access-denied-handler error-page="/deny"/>
+
+   		<!-- 로그 아웃 처리 -->
+        <security:logout invalidate-session="true" logout-success-url="/"/>
+        
+        <!--csrf 기본적으로 활성화 상태이지만  명시적으로 일단 지정해놓음  -->
+        <security:csrf disabled="false"/>
+    </security:http>
+    
+    <!-- BCrypt 커스터 마이징 -->
+    <bean id="encoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+    	<!-- BCrypt 강도 설정 -->
+		<constructor-arg name="strength" value="11"/>
+	</bean>
+    
+    <!-- 인증 매니저 설정 -->
+    <security:authentication-manager >
+        <security:authentication-provider>
+        	<security:password-encoder ref="encoder" />
+        	<security:jdbc-user-service data-source-ref="dataSource" 
+        		users-by-username-query="${auth.query}"
+        		authorities-by-username-query="${authority.query}"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+</beans>

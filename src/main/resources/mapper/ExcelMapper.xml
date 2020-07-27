@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.ExcelMapper">
+
+	<select id="selectYearAndMonthList" resultType="string">
+		select
+		CONCAT(year(REG_DATE),'-',month(REG_DATE)) AS DATE
+		from T_HOUSEHOLD
+		where USER=#{user} and year(REG_DATE)=#{year}
+		group by DATE
+		order by DATE asc
+	</select>
+
+	<!-- 엑셀에 뿌리기 위한 수입목록을 가져오는 부분 -->
+	<select id="selectIncomeDataList" resultType="ExcelData">
+		select
+			i.NAME AS name, t.MONEY AS money, CONCAT(month(t.REG_DATE),'월',day(t.REG_DATE),'일') AS date,
+			t.CONTENT AS content
+		from
+			T_HOUSEHOLD t, T_INCOME i
+		where
+			t.INCOME = i.NO and t.USER=#{user} and t.CATEGORY=2
+			and year(REG_DATE)=#{year} and
+			month(REG_DATE)=#{month} order by t.REG_DATE asc
+	</select>
+	
+	<!-- 엑셀에 뿌리기 위한 지출목록을 가져오는 부분 -->
+	<select id="selectSpendDataList" resultType="ExcelData">
+		select 
+			s.NAME AS name, t.MONEY AS money, CONCAT(month(t.REG_DATE),'월 ',day(t.REG_DATE),'일') AS date, 
+			t.CONTENT AS content
+		from
+			T_HOUSEHOLD t, T_SPEND s
+		where 
+			t.SPEND = s.NO and t.USER=#{user} and t.CATEGORY=1
+			and year(REG_DATE)=#{year} and month(REG_DATE)=#{month} order by t.REG_DATE asc	
+	</select>
+</mapper>

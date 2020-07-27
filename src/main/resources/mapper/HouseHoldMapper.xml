@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.HouseHoldMapper">
+
+	<resultMap type="HouseHold" id="HouseHoldResultMap">
+		<id column="NO" property="no"/>
+		<result column="MONEY" property="money"/>
+		<result column="CATEGORY" property="category"/>
+		<result column="REG_DATE" property="date"/>
+		<result column="USER" property="user"/>
+		<result column="SPEND" property="spend"/>
+		<result column="INCOME" property="income"/>
+		<result column="CONTENT" property="content"/>	
+	</resultMap>
+	
+	<select id="select" resultMap="HouseHoldResultMap">
+		select * from T_HOUSEHOLD
+		where year(REG_DATE)=#{year} and month(REG_DATE)=#{month} and user=#{user}
+		order by REG_DATE asc
+	</select>
+	
+	<insert id="insert" parameterType="HouseHold" keyProperty="no" useGeneratedKeys="true">
+		insert into T_HOUSEHOLD(MONEY,CATEGORY,REG_DATE,USER,SPEND,INCOME,CONTENT) 
+		values(#{money},#{category},#{date},#{user},#{spend},#{income},#{content})
+	</insert>
+	
+	
+	<update id="update">
+		update T_HOUSEHOLD
+		<set>
+			<if test="money!=null">MONEY=#{money},</if>
+			<if test="content!=null">CONTENT=#{content},</if>
+			<if test="category!=null">CATEGORY=#{category},</if>
+			<if test="date!=null">REG_DATE=#{date},</if>
+			<if test="spend!=null">SPEND=#{spend},</if>
+			<if test="income!=null">INCOME=#{income}</if>
+		</set>
+		where NO=#{no}	
+	</update>
+	
+	<delete id="delete">
+		delete from T_HOUSEHOLD where no=#{no}
+	</delete>
+	
+</mapper>

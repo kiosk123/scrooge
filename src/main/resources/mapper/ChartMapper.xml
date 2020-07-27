@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.ChartMapper">
+
+	<select id="selectSpendData" resultType="Chart">
+		select s.NAME AS name, sum(t.MONEY) AS money
+		from T_HOUSEHOLD t, T_SPEND s
+		where t.SPEND = s.NO and t.USER=#{user} 
+		and t.CATEGORY=1
+		and year(REG_DATE)=#{year} 
+		and month(REG_DATE)=#{month} group by name	
+	</select>
+	
+	<select id="selectIncomeData" resultType="Chart">
+		select i.NAME AS name, sum(t.MONEY) AS money
+		from T_HOUSEHOLD t, T_INCOME i
+		where t.INCOME = i.NO and t.USER=#{user}
+		and t.CATEGORY=2
+		and year(REG_DATE)=#{year} 
+		and month(REG_DATE)=#{month} group by name
+	</select>
+	
+	
+</mapper>

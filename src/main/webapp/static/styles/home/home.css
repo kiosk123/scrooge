@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+#container {
+	width: 650px;
+	margin: 0 auto;
+	margin-top: 5%;
+}
+
+h1 {
+	text-align: center;
+}
+
+p {
+	margin-bottom: 10%;
+}
+
+h2 {
+	text-align: center;
+}
+
+#join_btn {
+	margin-top: 10px;
+}

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.UserMapper">
+	
+<resultMap type="User" id="userResultMap">
+	 <id column="NO" property="no" />
+	 <result column="ID" property="id" />
+	 <result column="PASSWORD" property="password" />
+	 <result column="EMAIL" property="email" />
+	 <result column="ENABLED" property="enabled" />
+	 <result column="AUTHORITY" property="authority" />        
+</resultMap>
+
+<insert id="insert">
+ insert into T_USER(ID,PASSWORD,EMAIL,ENABLED,AUTHORITY) 
+ values(#{id},#{password},#{email},#{enabled},#{authority});
+</insert>
+
+
+<delete id="delete">
+	delete from T_USER where no=#{no}
+</delete>
+
+<update id="update">
+	update T_USER
+		<set>
+			<if test="id!=null">ID=#{id},</if>
+			<if test="password!=null">PASSWORD=#{password},</if>
+			<if test="email!=null">EMAIL=#{email},</if>
+			<if test="enabled!=null">ENABLED=#{enabled},</if>
+			<if test="authority!=null">AUTHORITY=#{authority}</if>
+		</set>
+	where NO=#{no}
+</update>
+
+<!-- T_USER와 T_AUTHORITY 테이블에서 사용자의 정보와 권한 정보를 모두 가져오는 쿼리 -->
+<select id="selectOne" resultMap="userResultMap">
+	select 
+		u.NO AS NO, ID, a.ROLE AS AUTHORITY, PASSWORD, EMAIL, ENABLED
+	from 
+		T_USER u,T_AUTHORITY a 
+	where 
+		u.AUTHORITY=a.NO and u.ID=#{id}
+</select>
+
+<select id="selectEmailOne" resultType="string">
+	select 
+		EMAIL
+	from 
+		T_USER
+	where 
+		EMAIL=#{email}
+</select>
+	
+</mapper>

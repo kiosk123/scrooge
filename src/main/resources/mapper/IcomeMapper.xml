@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.IncomeMapper">
+
+	<resultMap type="Income" id="IncomeResultMap">
+		<id column="NO" property="no"/>
+		<result column="NAME" property="name"/> 
+	</resultMap>
+	
+	<select id="select" resultMap="IncomeResultMap">
+		select * from T_INCOME
+		where NAME != '기타' 
+		order by NO desc	
+	</select>
+	
+	<!-- 항목 업데이트 -->
+	<update id="update">
+		update T_INCOME set NAME=#{name} where NO=#{no}
+	</update>
+	
+	<!-- 수입 항목 삭제 -->
+	<delete id="delete">
+		delete from T_INCOME where NO=#{no}
+	</delete>
+
+
+	<!-- insert -->
+	<insert id="insert" parameterType="Income" keyProperty="no" useGeneratedKeys="true">
+		insert into T_INCOME(NAME) values(#{name});
+	</insert>
+</mapper>

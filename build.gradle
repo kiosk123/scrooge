@@ -1,0 +1,102 @@
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'war'
+apply plugin: 'idea'
+apply plugin: 'com.bmuschko.docker-remote-api'
+import com.bmuschko.gradle.docker.tasks.container.*
+import com.bmuschko.gradle.docker.tasks.image.*
+
+group = 'org.springframework.samples.service.service'
+//version = '0.0.1-SNAPSHOT'
+
+description = """"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+eclipse{ 
+	project {
+  		natures 'org.eclipse.buildship.core.gradleprojectnature'
+  	}
+    
+    wtp{ 
+    	component{
+    		  contextPath = '/scrooge'
+    	}
+        facet{
+            facet name:'jst.web',version:'3.1' 
+            facet name:'jst.java',version:'1.8'
+        }
+    } 
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-docker-plugin:3.0.6'
+    }
+}
+
+repositories {       
+     mavenCentral()
+}
+
+docker {
+    url = 'tcp://127.0.0.1:2375'
+}
+
+task buildImage(type: DockerBuildImage) {
+    dependsOn build
+    inputDir = file('.')
+    tag = 'scrooge:latest'
+}
+
+task createContainer(type: DockerCreateContainer) {
+    dependsOn buildImage
+    targetImageId { buildImage.getImageId() }
+    portBindings = ['9090:8080']
+}
+
+dependencies {
+    compile group: 'org.springframework', name: 'spring-webmvc', version:'4.3.3.RELEASE'
+    compile group: 'javax.servlet', name: 'jstl', version:'1.2'
+    compile group: 'org.springframework', name: 'spring-tx', version:'4.3.3.RELEASE'
+    compile group: 'org.springframework', name: 'spring-jdbc', version:'4.3.3.RELEASE'
+    compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.5'
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version:'4.2.1.Final'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version:'2.6.3'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version:'2.6.3'
+    compile group: 'com.h2database', name: 'h2', version:'1.4.193'
+    compile group: 'org.mybatis', name: 'mybatis', version:'3.2.8'
+    compile group: 'org.mybatis', name: 'mybatis-spring', version:'1.2.2'
+    compile group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4', version:'1.16'
+    compile group: 'org.springframework.security', name: 'spring-security-web', version:'4.2.0.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-taglibs', version:'4.2.0.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-config', version:'4.2.0.RELEASE'
+    compile group: 'org.springframework', name: 'spring-aop', version:'4.3.3.RELEASE'
+    compile group: 'org.aspectj', name: 'aspectjrt', version:'1.8.9'
+    compile group: 'org.aspectj', name: 'aspectjweaver', version:'1.8.9'
+    compile group: 'org.apache.poi', name: 'poi', version:'3.15'
+    compile group: 'mysql', name: 'mysql-connector-java', version:'5.1.38'
+    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version:'0.21.0.RELEASE'
+    compile group: 'com.sun.mail', name: 'javax.mail', version:'1.5.6'
+    compile group: 'org.springframework', name: 'spring-context-support', version:'4.3.3.RELEASE'
+    runtime group: 'ch.qos.logback', name: 'logback-classic', version:'1.0.13'
+    testCompile group: 'org.springframework', name: 'spring-test', version:'4.3.3.RELEASE'
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version:'3.1.0'
+    providedCompile group: 'javax.servlet.jsp', name: 'jsp-api', version:'2.2'
+}
+
+
+uploadArchives {
+    repositories {
+        flatDir { dirs 'repos' }
+    }
+}

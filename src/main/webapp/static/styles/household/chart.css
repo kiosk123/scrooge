@@ -1,0 +1,12 @@
+@CHARSET "UTF-8";
+
+#BUTTON_GROUP{
+	position: relative;
+	left: 58%;
+}
+
+#msg{
+	position:relative;
+	top: 40%;
+	left:45%;
+}

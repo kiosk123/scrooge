@@ -1,0 +1,28 @@
+@CHARSET "UTF-8";
+
+h3 {
+	font-weight: bold;
+}
+
+#SHOW_USER_INFO + h3{
+	text-align: center;
+}
+
+#GO_MAIN_BTN{
+	position: relative;
+	width:30em; 
+	height:5em;
+	left:70px;
+}
+
+#container {
+	width: 650px;
+	margin: 0 auto;
+	margin-top: 5%;
+}
+
+h1 {
+	font-size: 3em;
+	font-weight: bold;
+	text-align: center;
+}

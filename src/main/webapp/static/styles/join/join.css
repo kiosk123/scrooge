@@ -1,0 +1,29 @@
+@CHARSET "UTF-8";
+
+#container {
+	width: 650px;
+	margin: 0 auto;
+	margin-top: 5%;
+}
+
+
+h1 {
+	font-size: 3em;
+	text-align: center;
+}
+
+#main_btn {
+	margin-top: 10px;
+}
+
+#dup_check {
+	position: relative;
+	left: 480px;
+	top: 30px;
+}
+
+#email_btn{
+	position: relative;
+	left: 480px;
+	top: 30px;
+}

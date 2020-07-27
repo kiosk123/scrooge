@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- Uncomment and your base-package here: <context:component-scan base-package="org.springframework.samples.web"/> -->
+
+
+	<context:component-scan base-package="controller" />
+
+	<mvc:default-servlet-handler />
+
+	<mvc:annotation-driven content-negotiation-manager="cnManager"/>
+
+	<!-- 정적 리소스 매핑 -->
+	<mvc:resources mapping="/resources/**" location="/static/" />
+
+	<mvc:view-controller path="/main" view-name="household/main" />
+	<mvc:view-controller path="/deny" view-name="error/deny" />
+	<mvc:view-controller path="/fail" view-name="error/fail" />
+	
+	<mvc:view-resolvers>
+		<mvc:content-negotiation use-not-acceptable="true" />
+		<bean class="org.springframework.web.servlet.view.XmlViewResolver">
+			<property name="location" value="classpath:config/view.xml" />
+		</bean>
+		<mvc:jsp prefix="/WEB-INF/" suffix=".jsp" />
+	</mvc:view-resolvers>
+
+	<bean id="cnManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="mediaTypes">
+			<map>
+				<entry key="html" value="text/html" />
+				<entry key="json" value="application/json" />
+				<entry key="xls" value="application/vnd.ms-excel" />
+			</map>
+		</property>
+		<property name="favorParameter" value="false" />
+		<property name="favorPathExtension" value="true"/>
+		<property name="ignoreAcceptHeader" value="false" />
+		<property name="defaultContentType" value="text/html" />
+	</bean>
+</beans>

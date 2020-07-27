@@ -1,0 +1,46 @@
+@CHARSET "UTF-8";
+#SPEND_ITEM_CONTAINER{
+	position: relative;
+	width: 30em;
+	top:10em;
+	left: 30em;
+}
+
+#SPEND_CONTENT{
+	overflow: scroll;
+    overflow-y:auto;
+    overflow-x: hidden;
+    height: 30em;
+}
+
+#INCOME_CONTENT{
+	overflow: scroll;
+    overflow-y:auto;
+    overflow-x: hidden;
+    height: 30em;
+}
+
+#INCOME_ITEM_CONTAINER{
+	position: relative;
+	top:-31em;
+	width: 30em;
+	left:70em;
+	overflow: scroll;
+    overflow-y:auto;
+    overflow-x: hidden;
+}
+
+h3{
+	text-align: center; 
+	font-weight: bold;
+}
+
+.insertGroup{
+	position: relative;
+	left: 3em;
+}
+
+.HEADER_TABLE{
+	position: relative;
+	left: 6em;
+}

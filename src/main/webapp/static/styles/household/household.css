@@ -1,0 +1,14 @@
+@CHARSET "UTF-8";
+
+/*등록 수정 및 삭제 버튼 그룹 CSS*/
+#HOUSEHOLD_BUTTON_GROUP {
+	position: relative;
+	left: 58%;
+}
+
+#HOUSEHOLD_TABLE_CONTENT{
+    height: 500px;
+    overflow: scroll;
+    overflow-y:auto;
+    overflow-x: hidden;
+}

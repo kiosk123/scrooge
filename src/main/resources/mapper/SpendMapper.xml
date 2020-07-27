@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.SpendMapper">
+	
+	<resultMap type="Spend" id="spendResultMap">
+		<id column="NO" property="no" />
+		<result column="NAME" property="name" />
+	</resultMap>
+	
+	<!-- 항목 업데이트 -->
+	<update id="update">
+		update T_SPEND set NAME=#{name} where NO=#{no}
+	</update>
+	
+	<!-- 지출 항목 삭제 -->
+	<delete id="delete">
+		delete from T_SPEND where NO=#{no}
+	</delete>
+
+	<!-- insert -->
+	<insert id="insert" parameterType="Spend" keyProperty="no" useGeneratedKeys="true">
+		insert into T_SPEND(NAME) values(#{name});
+	</insert>
+	
+	<!-- 가계부에서 사용할 지출항목을 결정하는데 이용 -->
+	<select id="selectList" resultMap="spendResultMap">
+		select *
+		from T_SPEND 
+		where NAME != '기타'
+		order by NO desc
+	</select>
+	
+</mapper>	
